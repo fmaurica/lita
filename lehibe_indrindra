@@ -1,0 +1,13 @@
+ISA AMPIDIRINA: 5.
+
+BAIKO:
+Forony lehibe_indrindra ho fidirana_faha[1].
+Forony mpanisa ho 2.
+Ataovy
+  ``Raha fidirana_faha[mpanisa] > lehibe_indrindra dia
+      raiso lehibe_indrindra kasoloy fidirana_faha[mpanisa].
+    Raiso mpanisa kasoloy mpanisa + 1.
+  ''
+rambola mpanisa <= isa_nampidirina.
+
+ISA AVOAKA: lehibe_indrindra.

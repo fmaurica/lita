@@ -1,0 +1,42 @@
+#!/bin/bash
+TEMPLATE=.lita.c.template
+cat > $TEMPLATE <<-EOM
+#include<stdio.h>
+void main() {
+  double fidirana_faha[NB_ARGS];
+  printf("MAMPIDIRA ISA %d: \n", NB_ARGS);
+  int __i = 0;
+  for (; __i < NB_ARGS; __i++) {
+    printf("  Inona no fidirana_faha[%d]? ", __i+1);
+    scanf("%lf", &fidirana_faha[__i]);
+  }
+  BODY
+}
+EOM
+TMP=.lita.tmp.c
+EXECUTABLE=$TMP.o
+NB_ARGS=$( head -n 1 $1 | \
+           perl -pe 's/ISA\s+AMPIDIRINA\s*:(.+)./\1/g' )
+perl -pe 's/ISA\s+AMPIDIRINA\s*:(.+).//g' $1        | \
+perl -pe 's/BAIKO\s*://g'                           | \
+perl -pe 's/faha\s*\[(.+)\]/faha\[(int)(\1)-1\]/g'  | \
+perl -pe "s/isa_nampidirina/$NB_ARGS/g"             | \
+perl -pe 's/[F|f]orony/double/g'                    | \
+perl -pe 's/ho/=/g'                                 | \
+perl -pe 's/[A|a]taovy/do/g'                        | \
+perl -pe 's/rambola/while/g'                        | \
+perl -pe 's/[.]/;/g'                                | \
+perl -pe 's/[R|r]aiso//g'                           | \
+perl -pe 's/kasoloy/=/g'                            | \
+perl -pe 's/[R|r]aha/if(/g'                         | \
+perl -pe 's/dia/)/g'                                | \
+perl -pe 's/ISA\s+AVOAKA\s*:\s*(.+);/printf("ISA MIVOAKA:[\\][\\]n  \1 dia %.2lf[\\][\\]n", \1);/g' | \
+perl -pe 's/\[\\\]/\\/g'                            | \
+perl -pe 's/``/{/g'                                 | \
+perl -pe "s/''/}/g"                                 | \
+perl -pe "s/while(.+);/while(\1);/g"                > $TMP
+BODY=$( cat $TMP )
+perl -pe "s/NB_ARGS/$NB_ARGS/g" $TEMPLATE | \
+perl -pe "s/BODY/$BODY/g"                 > $TMP
+gcc $TMP -o $EXECUTABLE && ./$EXECUTABLE
+rm $TEMPLATE $TMP $EXECUTABLE
